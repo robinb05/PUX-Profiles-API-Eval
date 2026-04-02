@@ -131,6 +131,7 @@ exp_list.forEach((d) => {
     d[linkType].forEach((linkObj) => {
 
       const targetName = Object.keys(linkObj)[0];
+      if (!xScale(targetName)) return; // skip targets not in scale domain
       const strength = linkObj[targetName];
       const pos_y = Y_ACTIVITIES;
 
@@ -216,35 +217,41 @@ svg
 
 d3.selectAll(".activity_circle")
   .on("mouseover", function (event, d) {
+    if (isClicked) { return; }
 
-    console.log("yo wtf",this);
+    if (_pendingMouseout !== null) {
+      clearTimeout(_pendingMouseout);
+      _pendingMouseout = null;
+    }
 
+    // Same circle re-entered (synthetic event from appendChild) — nothing to do
+    if (_activeHover === d) { return; }
 
-    if (isClicked) {console.log("clicked no mouseout");return;} // If clicked, disable mouseout behavior
+    // Moving to a different node — dezoom the previous if it was an experience
+    if (_activeHover !== null && typeof _activeHover === 'string') {
+      icon_dezoom(_activeHover);
+    }
+    _activeHover = d;
 
-    clean_activities_paths(); //targets activity paths only (optional)
+    // Stale DOM cleanup
+    d3.selectAll(".experience_names").remove();
+    d3.select("#tooltip").remove();
 
-    // sets innerhtml for headers and text on the right
-    set_html_text(d,'activity');
-
-    //despite what the name says, this draws the links between actvities and experiences lol
-        //animates activity-experience paths
-   experience_bullets(d);
-
-
+    clean_activities_paths();
+    set_html_text(d, 'activity');
+    experience_bullets(d);
   })
   .on("mouseout", function (event, d) {
-    if (isClicked) {console.log("clicked no mouseout");return;} // If clicked, disable mouseout behavior
-
-    // clean_activities_paths(); //targets activity paths only (optional)
-    fade_activities_paths(3000);
-
-    clear_html_text();
-    //clear_bullets();
-
-     //remove vertical text over circles
-     d3.selectAll(".experience_names").remove();
-
+    if (isClicked) { return; }
+    if (_activeHover !== d) { return; }
+    _pendingMouseout = setTimeout(() => {
+      _pendingMouseout = null;
+      if (_activeHover !== d) return;
+      _activeHover = null;
+      fade_activities_paths(3000);
+      clear_html_text();
+      d3.selectAll(".experience_names").remove();
+    }, 0);
   });
 // =========== ACTIVITY CIRCLES END =========== //
 
@@ -314,60 +321,59 @@ svg
   }  //required so that icons do not overlap on z index
 
   var isClicked = false; // Flag to track click state
+  let _activeHover = null;    // datum of the currently hovered circle
+  let _pendingMouseout = null; // setTimeout handle for deferred cleanup
 
 
- 
-  
 d3.selectAll(".experience_circle")
   .on("mouseover", function (event, d) {
-    if (isClicked) { 
-      console.log("clicked no mouseout");return;} // If clicked, disable mouseout behavior
+    if (isClicked) { return; }
+
+    if (_pendingMouseout !== null) {
+      clearTimeout(_pendingMouseout);
+      _pendingMouseout = null;
+    }
+
+    // _activeHover is still set to the previous datum until the timeout clears it.
+    // If it equals d, this is a synthetic re-entry from appendChild — cancel cleanup and bail.
+    if (_activeHover === d) { return; }
+
+    // Moving to a different circle — dezoom the previous one immediately
+    if (_activeHover !== null && typeof _activeHover === 'string') {
+      icon_dezoom(_activeHover);
+    }
+    _activeHover = d;
+
+    // Stale DOM cleanup
+    d3.selectAll(".experience_names").remove();
+    d3.select("#tooltip").remove();
 
     clean_activities_paths();
-
-    //clear_bullets();
-
     set_html_text(d, 'experience');
-   
-    //combined_bullets(d, find_experience_parents(d));  //bottom left bullets
-   
-    // clean_experience_paths(); //set all experience paths gray
 
-    //highlight relevant icons
     d3.selectAll(".experience_circle").style("opacity", OPACITY_OFF);
     d3.select(this).style("opacity", OPACITY_ON);
 
-    //draws animated paths, adds vertical text, and shows bullet points
-    // experience_sentiments_bullets(d); // bullets for positive and negative experience correlations
     find_experience_parents(d);
     icon_zoom(d);
-console.log("tooltip", d);
     show_tooltip(d);
-
   })
   .on("mouseout", function (event, d) {
-    if (isClicked) {
-      console.log("clicked no mouseout");return;} // If clicked, disable mouseout behavior
-
-    //clear_bullets();
-
-    clear_html_text();
-   
-   // clean_experience_paths();  //targets experience paths and circles
-    //fade_experience_paths(3000)
-    // clean_activities_paths(); //targets activity paths only (optional)
-     fade_activities_paths(3000);
-
-    icon_dezoom(d);
-
-    d3.select("#tooltip").remove();
-
-    //remove vertical text over circles
-    d3.selectAll(".experience_names").remove();
-
-    d3.selectAll(".experience_circle")
-    .style("opacity",OPACITY_ON);
-
+    if (isClicked) { return; }
+    if (_activeHover !== d) { return; }
+    // Do NOT clear _activeHover here — keep it set so the synthetic mouseover
+    // from appendChild sees _activeHover === d and bails out early.
+    _pendingMouseout = setTimeout(() => {
+      _pendingMouseout = null;
+      if (_activeHover !== d) return; // cursor moved to another circle
+      _activeHover = null;
+      clear_html_text();
+      fade_activities_paths(3000);
+      icon_dezoom(d);
+      d3.select("#tooltip").remove();
+      d3.selectAll(".experience_names").remove();
+      d3.selectAll(".experience_circle").style("opacity", OPACITY_ON);
+    }, 0);
   });
 
 

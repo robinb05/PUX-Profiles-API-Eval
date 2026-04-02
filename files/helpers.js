@@ -525,9 +525,8 @@ function clean_experience_paths(){
   d3.selectAll(".experiences_path").interrupt();
 
     d3.selectAll(".experiences_path")
-    // .interrupt()
-    // .transition()
-    // .duration(250)
+    .attr("stroke-dasharray", null)
+    .attr("stroke-dashoffset", null)
     .style("stroke", STROKE_COLOR_OFF)
     .style("opacity", OPACITY_OFF)
     .style("stroke-width", STROKE_WIDTH_OFF);
@@ -540,19 +539,17 @@ function clean_experience_paths(){
 function fade_experience_paths(duration) {
   d3.selectAll(".experiences_path")
     .interrupt()
+    .attr("stroke-dasharray", null)
+    .attr("stroke-dashoffset", null)
     .transition()
     .duration(duration)
     .style("stroke-width", STROKE_WIDTH_OFF)
     .style("opacity", OPACITY_OFF)
-    .end() // Wait for the transition to complete
+    .end()
     .then(() => {
-      // Change the "stroke" property after the transition ends
       d3.selectAll(".experiences_path").style("stroke", STROKE_COLOR_OFF);
     })
-    .catch(error => {
-      // Handle any errors that occur during the transition
-      console.error("Transition failed:", error);
-    });
+    .catch(() => {});
 
   // This part remains unchanged
   d3.selectAll(".experience_circle")
@@ -587,15 +584,11 @@ function fade_activities_paths(duration) {
     .duration(duration)
     .style("stroke-width", STROKE_WIDTH_OFF)
     .style("stroke-opacity", OPACITY_OFF)
-    .end() // Wait for the transition to complete
+    .end()
     .then(() => {
-      // Change the "stroke" property after the transition ends
       d3.selectAll(".activities_path").style("stroke", STROKE_COLOR_OFF);
     })
-    .catch(error => {
-      // Handle any errors that occur during the transition
-      console.error("Transition failed:", error);
-    });
+    .catch(() => {});
 }
 
 
@@ -635,6 +628,7 @@ function icon_dezoom(d){
       .transition()
       .duration(TRANSITION_TIME)
       .style("stroke", "none")
+      .style("stroke-width", "0")
       .attr("r", CIRCLE_RADIUS_PX);
 
     d3.select(icon_id)
@@ -828,57 +822,42 @@ d3.selectAll(".experience_circle").each(function (d, i) {
 }
 
 
-function show_tooltip(d, pointer=false){
+function show_tooltip(d){
 
-    // Create tooltip
     const tooltip = d3.select("body").append("div")
       .attr("id", "tooltip")
-      .attr("align", "right")
       .style("position", "absolute")
       .style("background-color", "white")
-      // .style("border", "1px solid black")
       .style("padding", "5px")
       .style("opacity", 0.6);
-    
-      const svgWidth = width;
-      const svgHeight=height;
-    
-    
-      // Set tooltip content initially to measure size
-      tooltip.html(PUX_COMPLETE[d].name+ "<br> <div id='pux_span'>"+pux_list_definitions[d.slice(0, 2)] + " " + PUX_COMPLETE[d].id[2]+"</div>");
-      document.getElementById("pux_span").style.color = colorMap[d.slice(0, 2)]; //sets color
-      document.getElementById("pux_span").style.fontSize = "12px";
 
-      // Dynamically calculate tooltip dimensions
-      const tooltipDimensions = tooltip.node().getBoundingClientRect();
-      const tooltipWidth = tooltipDimensions.width;
-      const tooltipHeight = tooltipDimensions.height;
+    tooltip.html(PUX_COMPLETE[d].name + "<br><div id='pux_span'>" + pux_list_definitions[d.slice(0, 2)] + " " + PUX_COMPLETE[d].id[2] + "</div>");
+    document.getElementById("pux_span").style.color = colorMap[d.slice(0, 2)];
+    document.getElementById("pux_span").style.fontSize = "12px";
 
-      let [x, y]=d3.pointer(event);
-      // Mouse position
-      if (pointer){
-        // x=d3.select("#experiences_circle-"+d).attr("cx");
-        // y=d3.select("#experiences_circle-"+d).attr("cy");
-        x=d3.select("#experiences_circle-"+d).attr("cx")/1;
-         y=d3.select("#experiences_circle-"+d).attr("cy")/1;
-        console.log("BUONGIORNO",d,x,y);
-      }
-     
-    // Calculate left and top position
-    // const leftPosition = (x + tooltipWidth > svgWidth) ? (x - tooltipWidth) : x;
-    // let topPosition = (y + tooltipHeight + 10 > svgHeight) ? (y - tooltipHeight) : (y + 10);
-    // topPosition=+338;
+    // Convert the zoomed icon's top-left corner from SVG space to page space.
+    // After icon_zoom, icon x = cx - ICON_WIDTH, y = cy - ICON_HEIGHT.
+    const circle = d3.select("#experiences_circle-" + d);
+    const cx = parseFloat(circle.attr("cx"));
+    const cy = parseFloat(circle.attr("cy"));
+    const iconLeft_svg = cx - ICON_WIDTH;
+    const iconTop_svg  = cy - ICON_HEIGHT;
 
-    const leftPosition = x+375;
-    const topPosition = (y-90);
+    const svgEl = svg.node();
+    const svgRect = svgEl.getBoundingClientRect();
+    const scaleX = svgRect.width  / parseFloat(svg.attr("width"));
+    const scaleY = svgRect.height / parseFloat(svg.attr("height"));
 
-    // Update tooltip position
+    const iconLeft_page = svgRect.left + window.scrollX + iconLeft_svg * scaleX;
+    const iconTop_page  = svgRect.top  + window.scrollY + iconTop_svg  * scaleY;
+
+    // Tooltip bottom-right corner near icon top-left, shifted slightly inward
+    const tooltipRect = tooltip.node().getBoundingClientRect();
+    const nudge = CIRCLE_RADIUS * SIZE_MULTIPLIER * scaleX * 0.5;
     tooltip
-      .style("bottom", `${height-topPosition}px`)
-      .style("right", `${leftPosition}px`);
-    
-    
-    }
+      .style("left", `${iconLeft_page - tooltipRect.width + nudge}px`)
+      .style("top",  `${iconTop_page  - tooltipRect.height + nudge}px`);
+}
    
 
     function clickable_interaction(){

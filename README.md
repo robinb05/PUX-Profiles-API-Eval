@@ -1,29 +1,26 @@
-# Interactive Data Visualization
+# PUX Personas
 
-Explore live: https://jb2328.github.io/PUX-Diagrams/
-
-ReadMe written by ChatGPT with some minor modifications by jb2328. 
+An interactive D3.js visualization for exploring PUX (Patterns of User Experience) persona profiles.
 
 ## Overview
 
-This repository contains the code and files for an interactive data visualization project. The visualization is designed to accompany the paper "A Pattern Language for the Design of Diagrams" by Alan Blackwell.
-
-![Screenshot of the visualisation](/docs/pux_screenshot.png)
-
+This repository contains the code and files for PUX Personas, an interactive data visualization tool. It is designed to accompany the paper "A Pattern Language for the Design of Diagrams" by Alan Blackwell.
 
 ### PUX  
 
-PUX, or Patterns of User Experience, is a framework aimed at enhancing the interaction between users and diagrams within user interfaces. It is designed to identify and apply user experience patterns that make diagrams more comprehensible, interactive, and adaptable to various user needs and expertise levels.
-
-![PUX Heatmap](/docs/heatmap.png)
-
-The framework describes 36 experiences and 10 activities. The heatmap above shows how these experiences are interlinked, with heatmap values representing their correlation strength. The d3.js visualisation creates a more interactive and designer-friendly version of this.
+PUX, or Patterns of User Experience, is a framework aimed at enhancing the interaction between users and diagrams within user interfaces. The Personas tool allows you to explore and compose user profiles across the 36 PUX experiences and 10 activities using interactive wind rose and pie chart visualizations.
 
 ## Usage
 
 1. Clone this repository to your local machine.
-2. Open the `index.html` file in your web browser.
-3. Explore the interactive visualization to gain insights into the research paper's content.
+2. Serve it with a local HTTP server (required for loading local JS/asset files):
+
+   ```bash
+   python3 -m http.server 8000
+   ```
+
+3. Open [http://localhost:8000](http://localhost:8000) in your browser.
+4. Explore the interactive visualization to gain insights into the research paper's content.
 
 ## Directory Structure
 - `PUX_data.js`: Full PUX paragraphs and ChatGPT4 generated summaries.
