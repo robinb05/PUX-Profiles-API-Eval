@@ -535,6 +535,8 @@ variables.forEach((variable, index) => {
   input.type = 'text';
   input.placeholder = '% of time spent';
   input.className = 'input-small';
+
+  input.setAttribute('data-variable', variable);
   
   // Event listener to update degrees based on percentage input and check sum
   input.addEventListener('input', () => {
@@ -692,6 +694,8 @@ downloadButton.onclick = function() {
     // Include pie chart values if necessary, adjust according to your needs
     // For example, adding pieConfig.degrees (make sure to update it with actual values upon input changes)
     dataToDownload.pieChartDegrees = pieConfig.degrees;
+
+    dataToDownload.windroseRadiiValues = windroseConfig.values;
 
     // Convert the data object to a JSON string
     const jsonData = JSON.stringify(dataToDownload, null, 2);

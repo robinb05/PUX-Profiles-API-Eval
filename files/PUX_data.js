@@ -116,6 +116,12 @@ const PUX_COMPLETE=
         "short_description": "Diagrams with clear parts enhance distinction and comparison.",
         "long_description": "Comparing different parts of the information structure is easier if they are both visible (VE1, VE5), but it is also necessary to see the respects in which they are different (ME3, ME4). Sometimes, close similarities in local appearance might mean that the distinctions jump out in some way (TE2)."
     },
+    "SE5": {
+        "name": "Changes to one thing do not affect other things",
+        "id": "SE5",
+        "short_description": "When writing code in relation to one part of system, developers will have a limited capacity to keep track of how this affects other parts of their code.",
+        "long_description": "CITE STEVEN CLARKE This concerns the amount of context that developers have to maintain about the code that is being written. If developers are working with a reasonably complex API, they may be required to keep mental track of the impact that the code they are currently writing will have throughout the rest of their application (SE1). Even if the API supports a small work-step unit (i.e., most tasks can be accomplished in code through writing a small number of lines of code in a local context) it might still be important to keep track of the impact of this code on other components of the overall application. For example, registering interest in a particular event fired by some class or system component may only require one or two lines of code, but it is important that the developer realize the impact that registering for that event will have on the ability of the rest of the application to respond to that same event.\nMY THOUGHTS\nIn order to achieve a small work-step unit, single operations may need to impact multiple components in parallel, giving users more to keep track of (PE2). The API and its ecosystem can be designed to make these relationships and the global impact of actions visible (VE1, ME2). Where there are there are classes/functions that are likely to have unintended conseqeuences, a type system with support for warnings may reduce the risk of errors (IE4)."
+    },
     "ME1": {
         "name": "It looks like what it describes",
         "id": "ME1",
@@ -217,6 +223,12 @@ const PUX_COMPLETE=
         "id": "TE5",
         "short_description": "Ease and control encourage user experimentation and exploration.",
         "long_description": "Users are more likely to explore if they feel safe \u2013 if they can do things easily (IE2), are in control of the effects (IE4), can try things out (PE3, PE4) and can reverse their actions if they change their mind (SE2). It\u2019s also helpful to be able to return to previous transient states (IE3), although this history then becomes part of the information structure. Experimentation and tinkering is valued by users carrying out creative tasks, so may be associated with CE3 and CE4."
+    },
+    "TE6": {
+        "name": "Taking actions helps you learn",
+        "id": "TE6",
+        "short_description": "Does using the API gradually teach you how it works, or does it pose additional learning requirements.",
+        "long_description": "For instance, if you can build a solution out of small modular components than are individually testable (PE2, PE3), then you can learn something about each type/class/function on its own rather than wrapped up in the specifics of your problem. Also, if users can review their code and clearly see the way individual sections of code interact as a whole to solve the problem (VE2), then they can learn generic lessons about use of the API. However if the library steers you towards easy actions (IE5), this may limit opportunities to learn lessons about the API that extend beyond the exact actions currently required. Similarly if elements are completely single purpose (TE4), then you don't naturally discover functionality that is not directly relevant to the current task. This might be less of a problem if there is easily navigable documentation available, offering a different style of learning."
     },
     "PE1": {
         "name": "The order of tasks is natural",

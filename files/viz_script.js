@@ -6,7 +6,7 @@ const activitiesWithChildren = activities;
 
 // Set dimensions
 const width = 500;
-const height = 1000;
+const height = 1060;
 const padding=10;
 
 const STROKE_COLOR_ON = "green";

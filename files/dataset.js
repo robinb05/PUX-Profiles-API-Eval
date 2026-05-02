@@ -1,8 +1,8 @@
 const exp_list=[
-    {
+      {
         'id': 'You can see relationships between parts',
         'name': 'SE1',
-        'link_positive': [{'IA1': 0.7}, {'IA2': 0.7}, {'VE1': 0.9}, {'VE5': 0.8}],
+        'link_positive': [{'IA1': 0.7}, {'IA2': 0.7}, {'VE1': 0.9}, {'VE5': 0.8}, {'SE5': 0.8}],
         'link_negative': [{'VE4': -0.6}, {'VE2': -0.7}, {'VE3': -0.7}, {'SE2': -0.9}]
       },
       {
@@ -23,17 +23,22 @@ const exp_list=[
         'link_positive': [{'VE1': 0.9}, {'VE5': 0.6}, {'ME3': 0.7}, {'ME4': 0.7}, {'TE2': 0.5}],
         'link_negative': []
       },
-      
+      {
+        'id': 'Changes to one thing do not affect other things',
+        'name': 'SE5',
+        'link_positive': [{'SE1': 0.8}, {'VE1': 0.5}, {'ME2': 0.6}, {'IE4': 0.6}],
+        'link_negative': [{'PE2': -0.7}]
+      },
       {
         'id': 'The information you need is visible',
         'name': 'VE1',
-        'link_positive': [{'VE4': 0.9}],
+        'link_positive': [{'VE4': 0.9}, {'SE5': 0.5}],
         'link_negative': []
       },
       {
         'id': 'The overall story is clear',
         'name': 'VE2',
-        'link_positive': [{'VE1': 0.9}, {'SE1': 0.8}],
+        'link_positive': [{'VE1': 0.9}, {'SE1': 0.8}, {'TE6': 0.7}],
         'link_negative': [{'VE5': -0.7}]
       },
       {
@@ -63,7 +68,7 @@ const exp_list=[
       {
         'id': 'The purpose of each part is clear',
         'name': 'ME2',
-        'link_positive': [{'ME1': 0.8}, {'PE2': 0.7}, {'VE3': 0.5}],
+        'link_positive': [{'ME1': 0.8}, {'PE2': 0.7}, {'VE3': 0.5}, {'SE5': 0.6}],
         'link_negative': []
       },
       {
@@ -111,14 +116,14 @@ const exp_list=[
       {
         'id': 'Accidental mistakes are unlikely',
         'name': 'IE4',
-        'link_positive': [{'IE5': 0.7},{'PE1': 0.8},{'PE2': 0.8}, {'TE1': 0.9}, {'TE2': 0.7}, {'TE4': 0.8}, {'VE2': 0.7}, {'VE3': 0.7}, {'SE3': 0.8}, {'ME2': 0.8}, {'ME3': 0.7}, {'ME4': 0.8}],
+        'link_positive': [{'IE5': 0.7},{'PE1': 0.8},{'PE2': 0.8}, {'TE1': 0.9}, {'TE2': 0.7}, {'TE4': 0.8}, {'VE2': 0.7}, {'VE3': 0.7}, {'SE3': 0.8}, {'ME2': 0.8}, {'ME3': 0.7}, {'ME4': 0.8}, {'SE5': 0.6}],
         'link_negative': [{'SE2': -0.9}, {'ME5': -0.6}, {'IE2': -0.8},  {'PE3': -0.7}, {'PE4': -0.7}, {'CE2': -0.8}, {'CE3': -0.8}, {'CE4': -0.7}]
       },
       {
         'id': 'Easier actions steer what you do',
         'name': 'IE5',
         'link_positive': [{'SA3': 0.5},{'SA1': 0.5},{'IE1': 0.8},{'IE2': 0.9}, {'SE3': 0.8}, {'VE3': 0.7}, {'PE1': 0.7}],
-        'link_negative': [{'CE2': -0.7}, {'SE2': -0.8}, {'ME5': -0.8}, {'TE3': -0.9}]
+        'link_negative': [{'CE2': -0.7}, {'SE2': -0.8}, {'ME5': -0.8}, {'TE3': -0.9}, {'TE6': -0.7}]
       },
       {
         'id': 'It is easy to refer to specific parts',
@@ -148,13 +153,19 @@ const exp_list=[
         'id': 'Elements mean only one thing',
         'name': 'TE4',
         'link_positive': [{'ME1': 0.8}, {'PE2': 0.8}],
-        'link_negative': [{'CE1': -0.7}, {'CE2': -0.7}, {'CE3': -0.7}]
+        'link_negative': [{'CE1': -0.7}, {'CE2': -0.7}, {'CE3': -0.7}, {'TE6': -0.8}]
       },
       {
         'id': 'You are drawn in to play around',
         'name': 'TE5',
         'link_positive': [{'IE2': 0.8}, {'IE4': 0.8}, {'PE3': 0.7}, {'PE4': 0.7}, {'SE2': 0.7}, {'IE3': 0.7}, {'CE3': 0.4}, {'CE4': 0.6}],
         'link_negative': []
+      },
+      {
+        'id': 'Taking actions helps you learn',
+        'name': 'TE6',
+        'link_positive': [{'PE2': 0.8}, {'PE3': 0.9}, {'VE2': 0.7}],
+        'link_negative': [{'IE5': -0.7}, {'TE4': -0.8}]
       },
       {
         'id': 'The order of tasks is natural',
@@ -165,13 +176,13 @@ const exp_list=[
       {
         'id': 'The steps you take match your goals',
         'name': 'PE2',
-        'link_positive': [{'ME5': 0.5}, {'TE4': 0.8}, {'ME2': 0.9}, {'VE5': 0.7}],
-        'link_negative': [ {'CE2': -0.7}]
+        'link_positive': [{'ME5': 0.5}, {'TE4': 0.8}, {'ME2': 0.9}, {'VE5': 0.7}, {'TE6': 0.8}],
+        'link_negative': [ {'CE2': -0.7, 'SE5': -0.7}]
       },
       {
         'id': 'You can try out a partial product',
         'name': 'PE3',
-        'link_positive': [{'IE2': 0.7}, {'TE5': 0.7}, {'PE4': 0.7}, {'ME5': 0.4}],
+        'link_positive': [{'IE2': 0.7}, {'TE5': 0.7}, {'PE4': 0.7}, {'ME5': 0.4}, {'TE6': 0.9}],
         'link_negative': []
       },
       {
@@ -237,7 +248,7 @@ const activities =
     "id": "Sense-making",
     "name": "IA3",
     "size": 1,
-    "imports": ["VE2", "VE3", "SE1", "ME1", "ME3", "TE3", "TE5"]
+    "imports": ["VE2", "VE3", "SE1", "ME1", "ME3", "TE3", "TE5", "TE6"]
   },
   {
     "id": "Incrementation",
@@ -255,13 +266,13 @@ const activities =
     "id": "Modification",
     "name": "CA3",
     "size": 1,
-    "imports": ["SE2", "ME5", "IE4", "TE1", "PE1", "CE1"]
+    "imports": ["SE2", "ME5", "IE4", "TE1", "PE1", "CE1", "SE5"]
   },
   {
     "id": "Exploratory design",
     "name": "CA4",
     "size": 1,
-    "imports": ["TE5", "PE3", "PE4", "CE2", "CE3", "CE4"]
+    "imports": ["TE5", "PE3", "PE4", "CE2", "CE3", "CE4", "TE6"]
   },
   {
     "id": "Illustrate a story",
@@ -303,7 +314,7 @@ const activities_dict =
     "id": "Sense-making",
     "name": "IA3",
     "size": 1,
-    "imports": ["VE2", "VE3", "SE1", "ME1", "ME3", "TE3", "TE5"]
+    "imports": ["VE2", "VE3", "SE1", "ME1", "ME3", "TE3", "TE5", "TE6"]
   },
   "CA1":{
     "id": "Incrementation",
@@ -321,13 +332,13 @@ const activities_dict =
     "id": "Modification",
     "name": "CA3",
     "size": 1,
-    "imports": ["SE2", "ME5", "IE4", "TE1", "PE1", "CE1"]
+    "imports": ["SE2", "ME5", "IE4", "TE1", "PE1", "CE1", "SE5"]
   },
  "CA4":{
     "id": "Exploratory design",
     "name": "CA4",
     "size": 1,
-    "imports": ["TE5", "PE3", "PE4", "CE2", "CE3", "CE4"]
+    "imports": ["TE5", "PE3", "PE4", "CE2", "CE3", "CE4", "TE6"]
   },
   "SA1":{
     "id": "Illustrate a story",
